@@ -1,0 +1,372 @@
+---
+import Icon from "./Icon.astro";
+import Terminal from "./Terminal.astro";
+import { profile, marquee } from "../data/cv";
+---
+
+<section class="hero" id="inicio" data-hero>
+  <canvas class="net" data-network aria-hidden="true"></canvas>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <div class="container inner">
+    <div class="copy">
+      <p class="status">
+        <span class="pulse" aria-hidden="true"></span>
+        {profile.location}
+      </p>
+
+      <h1 class="title">
+        <span class="line"><span>{profile.firstLine}</span></span>
+        <span class="line"><span class="grad">{profile.secondLine}</span></span>
+      </h1>
+
+      <p class="role">
+        <span class="role-mark" aria-hidden="true">&gt;</span>
+        <span class="sr-only">{profile.role}</span>
+        <span class="role-text" aria-hidden="true" data-roles={JSON.stringify(profile.roles)}>{profile.role}</span>
+      </p>
+
+      <p class="lead">{profile.lead}</p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="#experiencia">
+          Ver experiencia
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a class="btn btn-ghost" href="#contacto">Contactar</a>
+        <a class="social" href={profile.linkedin.url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Sergio Batres">
+          <Icon name="linkedin" size={20} />
+        </a>
+      </div>
+    </div>
+
+    <div class="visual">
+      <Terminal />
+    </div>
+  </div>
+
+  <!-- Cinta de tecnologías: la segunda lista es un duplicado decorativo
+       para que el bucle no tenga corte -->
+  <div class="marquee">
+    <ul class="track" aria-label="Tecnologías con las que trabajo">
+      {marquee.map((tech) => <li>{tech}</li>)}
+    </ul>
+    <ul class="track" aria-hidden="true">
+      {marquee.map((tech) => <li>{tech}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* ---------- Fondo ---------- */
+  .net,
+  .grid,
+  .glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .net {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+
+  .net.is-ready {
+    opacity: 1;
+  }
+
+  .grid {
+    background-image:
+      linear-gradient(rgb(148 163 184 / 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(148 163 184 / 0.055) 1px, transparent 1px);
+    background-size: 4rem 4rem;
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 20%, transparent 78%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, #000 20%, transparent 78%);
+  }
+
+  /* Dos auroras que derivan despacio. Son degradados radiales (sin filter:
+     blur) y solo se anima transform: no hay repintado */
+  .glow::before,
+  .glow::after {
+    content: "";
+    position: absolute;
+    width: 60rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .glow::before {
+    top: -28rem;
+    left: -18rem;
+    background: radial-gradient(closest-side, rgb(59 130 246 / 0.24), transparent);
+    animation: drift-a 18s ease-in-out infinite alternate;
+  }
+
+  .glow::after {
+    right: -22rem;
+    bottom: -30rem;
+    background: radial-gradient(closest-side, rgb(16 185 129 / 0.16), transparent);
+    animation: drift-b 22s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate(10rem, 6rem) scale(1.15);
+    }
+  }
+
+  @keyframes drift-b {
+    to {
+      transform: translate(-8rem, -7rem) scale(1.2);
+    }
+  }
+
+  /* ---------- Contenido ---------- */
+  .inner {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding-block: 7.5rem 3.5rem;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.03);
+    color: var(--text-2);
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    animation: rise 0.9s var(--ease-out) 0.05s both;
+  }
+
+  .pulse {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent-2);
+  }
+
+  .pulse::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent-2);
+    animation: ping 2.2s var(--ease-out) infinite;
+  }
+
+  @keyframes ping {
+    to {
+      scale: 3.2;
+      opacity: 0;
+    }
+  }
+
+  .title {
+    margin-top: 1.4rem;
+    font-family: var(--ff-display);
+    font-size: clamp(2.6rem, 6.4vw, 4.9rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  /* Cada línea sube desde detrás de su propio recorte */
+  .line {
+    display: block;
+    padding-bottom: 0.12em;
+    overflow: hidden;
+  }
+
+  .line > span {
+    display: inline-block;
+    animation: line-up 1s var(--ease-out) 0.12s both;
+  }
+
+  .line:nth-child(2) > span {
+    animation-delay: 0.22s;
+  }
+
+  @keyframes line-up {
+    from {
+      translate: 0 105%;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 1.25rem;
+    }
+  }
+
+  .role {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 1.75rem;
+    margin-top: 1.1rem;
+    font-family: var(--ff-mono);
+    font-size: clamp(0.95rem, 0.85rem + 0.5vw, 1.15rem);
+    font-weight: 400;
+    color: var(--accent);
+    white-space: nowrap;
+    animation: rise 0.9s var(--ease-out) 0.38s both;
+  }
+
+  .role-mark {
+    color: var(--accent-2);
+  }
+
+  .lead {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    color: var(--text-2);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    text-wrap: pretty;
+    animation: rise 0.9s var(--ease-out) 0.46s both;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    animation: rise 0.9s var(--ease-out) 0.54s both;
+  }
+
+  .social {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--text-2);
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      translate 0.25s var(--ease-out);
+  }
+
+  .social:hover {
+    color: var(--accent);
+    border-color: rgb(56 189 248 / 0.6);
+    translate: 0 -2px;
+  }
+
+  .visual {
+    min-width: 0;
+  }
+
+  /* ---------- Cinta ---------- */
+  .marquee {
+    --gap: 2.75rem;
+    display: flex;
+    gap: var(--gap);
+    padding-block: 1.15rem;
+    border-block: 1px solid var(--line);
+    background: rgb(255 255 255 / 0.012);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    animation: rise 1s var(--ease-out) 0.7s both;
+  }
+
+  .track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--gap);
+    min-width: 100%;
+    animation: marquee 48s linear infinite;
+  }
+
+  .marquee:hover .track {
+    animation-play-state: paused;
+  }
+
+  .track li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap);
+    color: var(--text-2);
+    font-family: var(--ff-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .track li::after {
+    content: "";
+    width: 0.3rem;
+    height: 0.3rem;
+    rotate: 45deg;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @media (max-width: 60rem) {
+    .inner {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: 7rem 3rem;
+    }
+
+    .visual {
+      max-width: 34rem;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    /* Los tres accesos caben en una fila en pantallas de ~390 px */
+    .actions {
+      gap: 0.5rem;
+    }
+
+    .actions .btn {
+      gap: 0.5rem;
+      padding: 0 1.1rem;
+      font-size: 0.9rem;
+    }
+
+    .marquee {
+      --gap: 1.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      animation: none;
+    }
+  }
+</style>

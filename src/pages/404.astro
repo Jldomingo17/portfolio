@@ -1,0 +1,52 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="404 — Página no encontrada" noindex>
+  <main class="wrap" id="contenido">
+    <p class="code">$ cd /esa-ruta</p>
+    <p class="err">bash: cd: no existe el fichero o el directorio</p>
+    <h1 class="title"><span class="grad">404</span></h1>
+    <p class="sub">La página que buscas no está aquí.</p>
+    <a class="btn btn-primary" href="/">Volver al inicio</a>
+  </main>
+</Base>
+
+<style>
+  .wrap {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    min-height: 100svh;
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+
+  .code,
+  .err {
+    font-family: var(--ff-mono);
+    font-size: 0.9rem;
+  }
+
+  .code {
+    color: var(--accent-2);
+  }
+
+  .err {
+    color: var(--muted);
+  }
+
+  .title {
+    font-family: var(--ff-display);
+    font-size: clamp(5rem, 22vw, 11rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .sub {
+    margin-bottom: 1.5rem;
+    color: var(--text-2);
+  }
+</style>

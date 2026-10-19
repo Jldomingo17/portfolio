@@ -1,0 +1,201 @@
+---
+import Icon from "./Icon.astro";
+import { profile } from "../data/cv";
+---
+
+<section class="section contact" id="contacto">
+  <div class="container">
+    <div class="panel" data-reveal="scale">
+      <div class="aura" aria-hidden="true"></div>
+
+      <p class="eyebrow">06 · Contacto</p>
+      <h2 class="title">¿<span class="grad">Hablamos</span>?</h2>
+      <p class="sub">
+        Si necesitas a alguien que despliegue, mantenga y resuelva, escríbeme. Respondo por correo o LinkedIn.
+      </p>
+
+      <div class="mail">
+        <a class="address" href={`mailto:${profile.email}`}>
+          <Icon name="mail" size={20} />
+          <span>{profile.email}</span>
+        </a>
+        <button class="copy" type="button" data-copy={profile.email} aria-label="Copiar el correo al portapapeles">
+          <Icon name="copy" size={18} class="i-copy" />
+          <Icon name="check" size={18} class="i-done" />
+          <span data-copy-label>Copiar</span>
+        </button>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${profile.email}`}>
+          Enviar un correo
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a class="btn btn-ghost" href={profile.linkedin.url} target="_blank" rel="noopener noreferrer">
+          <Icon name="linkedin" size={18} />
+          LinkedIn
+        </a>
+        {
+          profile.phone && (
+            <a class="btn btn-ghost" href={`tel:+34${profile.phone.replace(/\s/g, "")}`}>
+              <Icon name="phone" size={18} />
+              {profile.phone}
+            </a>
+          )
+        }
+      </div>
+
+      <p class="where">
+        <Icon name="map-pin" size={16} />
+        {profile.location}
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .panel {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(2.5rem, 7vw, 5rem) clamp(1.25rem, 5vw, 4rem);
+    border: 1px solid var(--line);
+    border-radius: 2rem;
+    background: var(--surface);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* Halo que respira detrás del titular: solo transform y opacity */
+  .aura {
+    position: absolute;
+    top: -55%;
+    left: 50%;
+    z-index: -1;
+    width: min(70rem, 160%);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(34 211 238 / 0.2), rgb(59 130 246 / 0.08) 55%, transparent);
+    animation: breathe 9s ease-in-out infinite alternate;
+  }
+
+  @keyframes breathe {
+    to {
+      scale: 1.18;
+      opacity: 0.65;
+    }
+  }
+
+  .title {
+    margin-top: 1rem;
+    font-family: var(--ff-display);
+    font-size: clamp(3rem, 11vw, 6.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .sub {
+    max-width: 32rem;
+    margin-top: 1.25rem;
+    color: var(--text-2);
+    font-size: 1.0625rem;
+    text-wrap: balance;
+  }
+
+  .mail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    max-width: 100%;
+    margin-top: 2.25rem;
+    padding: 0.4rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 1.25rem;
+    background: rgb(5 7 12 / 0.6);
+  }
+
+  .address {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: 0 0.9rem;
+    font-family: var(--ff-mono);
+    font-size: clamp(0.8rem, 0.6rem + 1vw, 1.05rem);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .address span {
+    overflow-wrap: anywhere;
+  }
+
+  .address :global(svg) {
+    flex-shrink: 0;
+    color: var(--accent);
+  }
+
+  .address:hover {
+    color: var(--accent);
+  }
+
+  .copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 0.9rem;
+    background: rgb(255 255 255 / 0.08);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .copy:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  .copy .i-done,
+  .copy.is-copied .i-copy {
+    display: none;
+  }
+
+  .copy.is-copied {
+    background: rgb(52 211 153 / 0.16);
+    color: var(--accent-2);
+  }
+
+  .copy.is-copied .i-done {
+    display: block;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .where {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 2rem;
+    color: var(--muted);
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+  }
+</style>

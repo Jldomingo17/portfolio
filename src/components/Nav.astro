@@ -1,0 +1,268 @@
+---
+import Icon from "./Icon.astro";
+import { nav } from "../data/cv";
+---
+
+<div class="progress" aria-hidden="true"></div>
+
+<header class="nav" data-nav>
+  <div class="bar">
+    <a class="brand" href="#inicio" aria-label="Sergio Batres, ir al inicio">
+      <span class="mark" aria-hidden="true">SB</span>
+      <span class="name">sergio<span>.batres</span></span>
+    </a>
+
+    <nav class="links" id="menu" aria-label="Secciones" data-nav-links>
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a class="links-cta" href="#contacto">Contacto</a>
+    </nav>
+
+    <a class="cta" href="#contacto">Contacto</a>
+
+    <button class="toggle" type="button" aria-expanded="false" aria-controls="menu" data-nav-toggle>
+      <span class="sr-only">Menú</span>
+      <Icon name="menu" class="i-open" />
+      <Icon name="x" class="i-close" />
+    </button>
+  </div>
+</header>
+
+<style>
+  /* Barra de progreso de lectura: animación ligada al scroll, sin JavaScript */
+  .progress {
+    display: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .progress {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: var(--z-top);
+      height: 2px;
+      background: var(--grad);
+      transform-origin: 0 50%;
+      scale: 0 1;
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+
+  @keyframes progress {
+    to {
+      scale: 1 1;
+    }
+  }
+
+  .nav {
+    position: fixed;
+    inset: 0.75rem 0 auto;
+    z-index: var(--z-nav);
+    pointer-events: none;
+    /* backwards (no both): si la animación quedara activa, .nav se convertiría
+       en raíz de fondo y el backdrop-filter de la barra dejaría de desenfocar */
+    animation: nav-in 0.9s var(--ease-out) 0.1s backwards;
+  }
+
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      translate: 0 -1.25rem;
+    }
+  }
+
+  .bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: min(100% - 1.5rem, 62rem);
+    margin-inline: auto;
+    padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgb(8 11 18 / 0.8);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow: 0 10px 40px -12px rgb(0 0 0 / 0.7);
+    pointer-events: auto;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    text-decoration: none;
+  }
+
+  .mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.6rem;
+    background: var(--grad);
+    color: #04121a;
+    font-family: var(--ff-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .name {
+    font-family: var(--ff-mono);
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  .name span {
+    color: var(--muted);
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-left: auto;
+  }
+
+  .links a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 0.85rem;
+    border-radius: 999px;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .links a:hover {
+    color: var(--text);
+  }
+
+  .links a.is-active {
+    color: var(--text);
+    background: rgb(255 255 255 / 0.07);
+  }
+
+  .links-cta {
+    display: none !important;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1.15rem;
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.25s;
+  }
+
+  .cta:hover {
+    background: #fff;
+    box-shadow: 0 0 0 4px rgb(255 255 255 / 0.12);
+  }
+
+  .toggle {
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.07);
+    cursor: pointer;
+  }
+
+  .toggle .i-close,
+  .toggle[aria-expanded="true"] .i-open {
+    display: none;
+  }
+
+  .toggle[aria-expanded="true"] .i-close {
+    display: block;
+  }
+
+  @media (max-width: 56rem) {
+    .cta {
+      display: none;
+    }
+
+    .toggle {
+      display: grid;
+      margin-left: auto;
+    }
+
+    /* El menú pasa a ser un panel desplegable bajo la barra */
+    .links {
+      position: absolute;
+      inset: calc(100% + 0.5rem) 0 auto;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.15rem;
+      margin: 0;
+      padding: 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      background: rgb(8 11 18 / 0.96);
+      box-shadow: 0 20px 50px -12px rgb(0 0 0 / 0.8);
+      visibility: hidden;
+      opacity: 0;
+      translate: 0 -0.5rem;
+      transition:
+        opacity 0.25s var(--ease-out),
+        translate 0.25s var(--ease-out),
+        visibility 0s 0.25s;
+    }
+
+    .links.is-open {
+      visibility: visible;
+      opacity: 1;
+      translate: none;
+      transition-delay: 0s;
+    }
+
+    .links a {
+      min-height: 3rem;
+      padding: 0 1rem;
+      border-radius: 0.85rem;
+      font-size: 1rem;
+    }
+
+    .links-cta {
+      display: inline-flex !important;
+      justify-content: center;
+      margin-top: 0.35rem;
+      background: var(--text) !important;
+      color: var(--bg) !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  /* Sin JavaScript no hay botón que abra el panel: queda el acceso a Contacto */
+  @media (max-width: 56rem) and (scripting: none) {
+    .toggle {
+      display: none;
+    }
+
+    .cta {
+      display: inline-flex;
+      margin-left: auto;
+    }
+  }
+</style>

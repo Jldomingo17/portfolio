@@ -1,0 +1,238 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import foto from "../assets/foto.jpg";
+import { profile, languages, education } from "../data/cv";
+
+const current = education.find((e) => e.current);
+---
+
+<section class="section" id="sobre-mi">
+  <div class="container layout">
+    <div class="photo" data-reveal="scale">
+      <div class="ring">
+        <!-- Recorte 5:6 desde arriba, servido en WebP (JPEG de respaldo) y a varios anchos -->
+        <Picture
+          src={foto}
+          alt={`Retrato de ${profile.name}`}
+          width={640}
+          height={768}
+          fit="cover"
+          position="top"
+          widths={[320, 480, 640]}
+          sizes="(min-width: 60rem) 22rem, (min-width: 30rem) 20rem, 78vw"
+          formats={["webp"]}
+          quality={72}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <p class="tag tag-a">
+        <Icon name="map-pin" size={15} />
+        {profile.location}
+      </p>
+      {
+        current && (
+          <p class="tag tag-b">
+            <span class="dot" aria-hidden="true" />
+            ASIR · en curso
+          </p>
+        )
+      }
+    </div>
+
+    <div class="text">
+      <div data-reveal>
+        <p class="eyebrow">01 · Sobre mí</p>
+        <h2 class="section-title">Sistemas, redes y <span class="grad">ganas de resolver</span>.</h2>
+      </div>
+
+      <div class="bio" data-reveal>
+        {profile.about.map((p) => <p>{p}</p>)}
+      </div>
+
+      <dl class="facts" data-stagger>
+        <div class="fact" data-reveal>
+          <dt><Icon name="map-pin" size={16} /> Ubicación</dt>
+          <dd>{profile.location}</dd>
+        </div>
+        <div class="fact" data-reveal>
+          <dt><Icon name="globe" size={16} /> Idiomas</dt>
+          <dd>{languages.map((l) => l.name).join(" · ")}</dd>
+        </div>
+        <div class="fact" data-reveal>
+          <dt><Icon name="graduation-cap" size={16} /> Ahora mismo</dt>
+          <dd>Cursando ASIR</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 7vw, 6rem);
+  }
+
+  /* ---------- Foto ---------- */
+  .photo {
+    position: relative;
+  }
+
+  /* Mismo truco que el terminal: degradado cónico que gira por transform
+     y la imagen opaca encima deja ver solo el borde */
+  .ring {
+    position: relative;
+    padding: 2px;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    box-shadow:
+      0 30px 70px -25px rgb(0 0 0 / 0.9),
+      0 0 80px -30px rgb(56 189 248 / 0.5);
+  }
+
+  .ring::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 170%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: conic-gradient(from 0deg, #60a5fa, #22d3ee, #34d399, transparent 55%, #60a5fa);
+    animation: ring-spin 9s linear infinite;
+  }
+
+  @keyframes ring-spin {
+    to {
+      rotate: 1turn;
+    }
+  }
+
+  .ring :global(img) {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-radius: calc(1.6rem - 2px);
+    background: var(--surface-2);
+  }
+
+  .tag {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: rgb(8 11 18 / 0.88);
+    box-shadow: 0 12px 30px -10px rgb(0 0 0 / 0.8);
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    animation: bob 6s ease-in-out infinite alternate;
+  }
+
+  .tag :global(svg) {
+    color: var(--accent);
+  }
+
+  .tag-a {
+    top: 1.5rem;
+    left: -1.25rem;
+  }
+
+  .tag-b {
+    right: -1.25rem;
+    bottom: 2rem;
+    animation-delay: -3s;
+  }
+
+  .dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 4px rgb(52 211 153 / 0.2);
+  }
+
+  @keyframes bob {
+    to {
+      translate: 0 -0.6rem;
+    }
+  }
+
+  /* ---------- Texto ---------- */
+  .bio {
+    display: grid;
+    gap: 1rem;
+    max-width: 38rem;
+    margin-top: 1.75rem;
+    color: var(--text-2);
+    font-size: 1.0625rem;
+    text-wrap: pretty;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin: 2.25rem 0 0;
+  }
+
+  .fact {
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.025);
+  }
+
+  .fact dt {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--muted);
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .fact dt :global(svg) {
+    color: var(--accent);
+  }
+
+  .fact dd {
+    margin: 0.45rem 0 0;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 60rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .photo {
+      width: min(100%, 20rem);
+      margin-inline: auto;
+    }
+
+    .tag-a {
+      left: -0.75rem;
+    }
+
+    .tag-b {
+      right: -0.75rem;
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .facts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

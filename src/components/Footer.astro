@@ -1,0 +1,57 @@
+---
+import Icon from "./Icon.astro";
+import { profile } from "../data/cv";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container inner">
+    <p>© {year} {profile.name}</p>
+    <p class="built">Hecho con Astro · HTML estático, sin rastreadores</p>
+    <a class="top" href="#inicio">
+      Volver arriba
+      <Icon name="arrow-up" size={16} />
+    </a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.25rem;
+  }
+
+  .top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .top:hover {
+    color: var(--accent);
+  }
+
+  .top :global(svg) {
+    transition: translate 0.25s var(--ease-out);
+  }
+
+  .top:hover :global(svg) {
+    translate: 0 -3px;
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+import Icon from "./Icon.astro";
+import { skills } from "../data/cv";
+---
+
+<section class="section" id="stack">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">04 · Stack</p>
+      <h2 class="section-title">Competencias <span class="grad">técnicas</span></h2>
+    </div>
+
+    <ul class="grid" data-stagger data-spot-group>
+      {
+        skills.map((group) => (
+          <li class="spot card" data-spot data-reveal>
+            <div class="head">
+              <span class="icon">
+                <Icon name={group.icon} size={20} />
+              </span>
+              <h3 class="title">{group.title}</h3>
+            </div>
+            <ul class="items">
+              {group.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid rgb(52 211 153 / 0.28);
+    border-radius: 0.75rem;
+    background: rgb(52 211 153 / 0.09);
+    color: var(--accent-2);
+    transition: scale 0.4s var(--ease-out);
+  }
+
+  .card:hover .icon {
+    scale: 1.1;
+  }
+
+  .title {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.25rem;
+  }
+
+  .items li {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.03);
+    color: var(--text-2);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    transition:
+      color 0.25s,
+      border-color 0.25s;
+  }
+
+  .card:hover .items li {
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+
+  @media (max-width: 60rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

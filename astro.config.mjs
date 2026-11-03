@@ -4,9 +4,12 @@ import { defineConfig, fontProviders } from "astro/config";
 // URL pública del sitio (p. ej. https://sergiobatres.dev). Activa canonical,
 // og:url y og:image absolutos. Se define en el entorno de build: SITE_URL=...
 const site = process.env.SITE_URL || undefined;
+// Subcarpeta donde se publica (p. ej. /portfolio en GitHub Pages). Por defecto, la raíz
+const base = process.env.BASE_PATH || "/";
 
 export default defineConfig({
   site,
+  base,
   build: {
     // Todo el CSS va inline en el HTML: cero peticiones bloqueantes de estilos
     inlineStylesheets: "always",

@@ -2,6 +2,8 @@
 
 Portfolio personal de **Sergio Batres López-Bueno**, Administrador DevOps en Madrid: servidores Linux, Docker, Coolify, redes, DNS y Active Directory.
 
+**🌐 Ver en vivo: [jldomingo17.github.io/portfolio](https://jldomingo17.github.io/portfolio/)**
+
 Es una web estática de una sola página hecha con [Astro](https://astro.build), sin frameworks de UI ni dependencias en el navegador, y pensada para ser rápida, accesible y segura.
 
 ## Características
@@ -87,6 +89,16 @@ Edita [`src/data/cv.ts`](src/data/cv.ts):
 La foto está en `src/assets/foto.jpg` y la imagen para redes sociales en `public/og.jpg`.
 
 ## Despliegue
+
+### GitHub Pages (automático)
+
+Cada push a `main` ejecuta [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que compila la web y la publica en **https://jldomingo17.github.io/portfolio/**. También se puede lanzar a mano desde la pestaña *Actions* → *Desplegar en GitHub Pages* → *Run workflow*.
+
+Configuración necesaria (solo una vez): en el repositorio, *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
+
+### Variable `BASE_PATH`
+
+Subcarpeta donde se publica la web. En GitHub Pages es `/portfolio` y el workflow la rellena solo. Si no se define, la web se sirve desde la raíz (`/`), que es lo que necesitan Docker y Coolify.
 
 ### Variable `SITE_URL`
 

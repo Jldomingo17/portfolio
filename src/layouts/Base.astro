@@ -13,7 +13,8 @@ const { title = site.title, description = site.description, noindex = false } = 
 
 // Solo hay URLs absolutas si se ha configurado SITE_URL en el build
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
-const ogImage = Astro.site ? new URL("/og.jpg", Astro.site).href : undefined;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const ogImage = Astro.site ? new URL(`${base}og.jpg`, Astro.site).href : undefined;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -44,7 +45,7 @@ const jsonLd = {
     <meta name="theme-color" content="#05070c" />
     <meta name="color-scheme" content="dark" />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     {canonical && <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content="profile" />
